@@ -306,6 +306,7 @@ class LevelParser {
                 if (actor in this.dictionary) {
                     if (typeof this.dictionary[actor] === "function") {
                         if (Object.getPrototypeOf(this.dictionary[actor]).name === "Actor" ||
+                            Object.getPrototypeOf(this.dictionary[actor]).name === "Fireball" ||
                             this.dictionary[actor].name === "Actor") {
                             const func = this.dictionary[actor];
                             result.push(new func(new Vector(x, y)));
