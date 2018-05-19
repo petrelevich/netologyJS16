@@ -114,6 +114,9 @@ class Actor {
               actor.right  >= this.left && actor.right  <= this.right) ||
 
              (actor.bottom >= this.top  && actor.bottom <= this.bottom &&
+              actor.right  >= this.left && actor.right  <= this.right) ||
+
+             (actor.bottom >= this.bottom  && actor.top <= this.top &&
               actor.right  >= this.left && actor.right  <= this.right)
            ) {
             return true;
@@ -205,10 +208,10 @@ class Level {
             throw new Error('Свойство "Размер" должно быть типа Vector');
         }
 
-        const position = new Actor(new Vector(Math.floor(target.x), Math.floor(target.y)),
-                                    new Vector(Math.floor(size.x), Math.floor(size.y)));
+        const position = new Actor(new Vector(target.x, target.y),
+                                    new Vector(size.x, size.y));
 
-        if (position.top < 0 || position.left < 0 || position.right > this.width) {
+        if (position.top < 0 || position.left < 0 || position.right >= this.width) {
             return "wall"
         }
 
@@ -216,8 +219,14 @@ class Level {
             return "lava"
         }
 
-        for (let y = position.top; y < this._grid.length && y <= position.bottom; y++) {
-            for (let x = position.left; x < this._grid[y].length && x <= position.right; x++) {
+        const topF = Math.floor(position.top);
+        const bottomC = Math.ceil(position.bottom);
+
+        const leftF = Math.floor(position.left);
+        const rightC = Math.ceil(position.right);
+
+        for (let y = topF; y < this._grid.length && y < bottomC; y++) {
+            for (let x = leftF; x < this._grid[y].length && x < rightC; x++) {
                 if (this._grid[y][x]) {
                     return this._grid[y][x];
                 }
